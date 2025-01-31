@@ -1,3 +1,4 @@
+from collections import deque
 from functools import reduce
 
 import pandas as pd
@@ -98,11 +99,36 @@ if __name__ == '__main__':
 
     print(game)
 
+    # Initial state
     state = {
-        "player1": 61,
-        "player2": 1,
+        "player1": 1,
+        "player2": 7,
         "rule_change": False,
-        "last_move": "player2"
+        "last_move": "none"
     }
 
-    print(legal_next_states(state, game))
+    to_explore = deque([(state, [f"Player 1 at {state['player1']} and 2 at {state['player2']}"])])
+    explored = set()
+
+    while len(to_explore) > 0:
+        state, path = to_explore.popleft()
+
+        if state["player1"] == 100 or state["player2"] == 100:
+            print("Found a solution:")
+            for step in path:
+                print(step)
+            continue
+
+        for next_state in legal_next_states(state, game):
+            id = tuple(next_state.values())
+            if id in explored:
+                continue # avoid running in circles
+            explored.add(id)
+
+            next_path = list(path)
+            next_path.append(f"Player 1 at {next_state['player1']} and 2 at {next_state['player2']}")
+
+            to_explore.append((next_state, tuple(next_path)))
+
+
+    print("Finished")
