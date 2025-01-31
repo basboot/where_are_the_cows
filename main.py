@@ -1,9 +1,16 @@
+from functools import reduce
+
 import pandas as pd
 
 # state
 # player1 (position)
 # player2 (position)
 # rule_change (true|false)
+
+OTHER = {
+    "player1": "player2",
+    "player2": "player1"
+}
 
 def perform_moves(player, state, paths):
     next_states = []
@@ -22,7 +29,15 @@ def legal_next_states(state, game):
         if state["rule_change"] and game[state[player]]["is_red"]:
             next_states += perform_moves(player, state, ["yes"])
         else:
-            pass
+            if game[state[player]]["look_at"] in {"this", "other"}:
+                # normal rule
+                player_to_look_at = player if game[state[player]]["look_at"] == "this" else OTHER[player]
+                checks_to_do = game[state[player]]["check"].split(", ")
+                is_yes = reduce(lambda x, y: x or y, [game[state[player_to_look_at]][check] for check in checks_to_do])
+                next_states += perform_moves(player, state, ["yes"] if is_yes else ["no"])
+            else:
+                # advanced rule
+                pass
     return next_states
 
 
@@ -43,7 +58,7 @@ if __name__ == '__main__':
     state = {
         "player1": 9,
         "player2": 2,
-        "rule_change": True
+        "rule_change": False
     }
 
     print(legal_next_states(state, game))
