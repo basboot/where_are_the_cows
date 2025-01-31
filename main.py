@@ -24,6 +24,13 @@ def perform_moves(player, state, paths):
         next_states.append(next_state)
     return next_states
 
+def get_all_paths(player, state, game):
+    paths = []
+    for option in ["yes", "no", "lugnut"]:
+        if game[state[player]][option] > 0:
+            paths.append(option)
+    return paths
+
 def legal_paths(player, state, game):
     # ignore red texts during rule change
     if state["rule_change"] and game[state[player]]["is_red"]:
@@ -41,6 +48,8 @@ def legal_paths(player, state, game):
                     return ["yes"] if state["last_move"] == OTHER[player] else ["no"]
                 case "would_other_move_to_no":
                     return ["yes"] if "no" in legal_paths(OTHER[player], state, game) else ["no"]
+                case "free_choice":
+                    return get_all_paths(player, state, game)
 
             # advanced rule
             return []
@@ -69,7 +78,7 @@ if __name__ == '__main__':
     print(game)
 
     state = {
-        "player1": 26,
+        "player1": 55,
         "player2": 1,
         "rule_change": False,
         "last_move": "player2"
