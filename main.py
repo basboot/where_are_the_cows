@@ -6,6 +6,7 @@ import pandas as pd
 # player1 (position)
 # player2 (position)
 # rule_change (true|false)
+# last_move (player1|player2)
 
 OTHER = {
     "player1": "player2",
@@ -19,6 +20,7 @@ def perform_moves(player, state, paths):
         assert next_box > 0, "Illegal move"
         next_state = state.copy()
         next_state[player] = next_box
+        next_state["last_move"] = player
         next_states.append(next_state)
     return next_states
 
