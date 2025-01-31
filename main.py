@@ -39,6 +39,8 @@ def legal_paths(player, state, game):
             match game[state[player]]["check"]:
                 case "last_move_other":
                     return ["yes"] if state["last_move"] == OTHER[player] else ["no"]
+                case "would_other_move_to_no":
+                    return ["yes"] if "no" in legal_paths(OTHER[player], state, game) else ["no"]
 
             # advanced rule
             return []
@@ -67,8 +69,8 @@ if __name__ == '__main__':
     print(game)
 
     state = {
-        "player1": 9,
-        "player2": 2,
+        "player1": 26,
+        "player2": 1,
         "rule_change": False,
         "last_move": "player2"
     }
