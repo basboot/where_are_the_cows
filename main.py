@@ -50,6 +50,17 @@ def legal_paths(player, state, game):
                     return ["yes"] if "no" in legal_paths(OTHER[player], state, game) else ["no"]
                 case "free_choice":
                     return get_all_paths(player, state, game)
+                case "rule_change_on":
+                    # TODO: apply rule change
+                    return get_all_paths(player, state, game)
+                case "move_other_to_yes":
+                    # TODO: perform move other
+                    return get_all_paths(player, state, game)
+                case "rule_change_off":
+                    # TODO: apply rule change
+                    return get_all_paths(player, state, game)
+
+
 
             # advanced rule
             return []
