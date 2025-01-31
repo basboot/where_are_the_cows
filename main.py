@@ -36,6 +36,10 @@ def legal_paths(player, state, game):
             is_yes = reduce(lambda x, y: x or y, [game[state[player_to_look_at]][check] for check in checks_to_do])
             return ["yes"] if is_yes else ["no"]
         else:
+            match game[state[player]]["check"]:
+                case "last_move_other":
+                    return ["yes"] if state["last_move"] == OTHER[player] else ["no"]
+
             # advanced rule
             return []
 
@@ -63,9 +67,10 @@ if __name__ == '__main__':
     print(game)
 
     state = {
-        "player1": 1,
+        "player1": 9,
         "player2": 2,
-        "rule_change": False
+        "rule_change": False,
+        "last_move": "player2"
     }
 
     print(legal_next_states(state, game))
